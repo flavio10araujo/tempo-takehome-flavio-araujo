@@ -1,0 +1,19 @@
+# IDE / editor
+.vscode/
+.idea/
+
+# Gradle
+.gradle/
+build/
+out/
+bin/
+
+# Kotlin compiler/runtime artifacts
+.kotlinc/
+*.kotlin_module
+*.class
+
+# Optional common
+.gradle/
+**/build/
+*.iml
