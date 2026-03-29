@@ -24,11 +24,33 @@ interface Hierarchy {
 }
 
 /**
- * A node is present in the filtered hierarchy iff its node ID passes the predicate and all of its ancestors pass it as well.
+ * A node is present in the filtered hierarchy if its node ID passes the predicate and all of its ancestors pass it as well.
  */
 fun Hierarchy.filter(nodeIdPredicate: (Int) -> Boolean): Hierarchy {
-  // todo implement
-  return ArrayBasedHierarchy(IntArray(0), IntArray(0))
+    val resultNodeIds = mutableListOf<Int>()
+    val resultDepths = mutableListOf<Int>()
+
+    val acceptedAtDepth = mutableMapOf<Int, Boolean>()
+
+    for (i in 0 until size) {
+        val id = nodeId(i)
+        val depth = depth(i)
+
+        val parentAccepted = if (depth == 0) true else acceptedAtDepth[depth - 1] == true
+        val accepted = parentAccepted && nodeIdPredicate(id)
+
+        acceptedAtDepth[depth] = accepted
+
+        if (accepted) {
+            resultNodeIds.add(id)
+            resultDepths.add(depth)
+        }
+    }
+
+    return ArrayBasedHierarchy(
+        resultNodeIds.toIntArray(),
+        resultDepths.toIntArray()
+    )
 }
 
 class ArrayBasedHierarchy(
